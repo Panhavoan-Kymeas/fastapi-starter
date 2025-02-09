@@ -3,12 +3,30 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
+import os
+import sys
+
 # import setting from core.config
 from core.config import settings
 
 # import Base from core.database
 from core.database import Base
-from apps.users.models import User
+# Ensure the app folder is included in the path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "app")))
+
+# ----------------------------------------------------------------
+# IMPORTANT: Import models from each folder (users, orders, etc.)
+# Add imports below for new models
+# ----------------------------------------------------------------
+
+# For example, if you have a user model, you would do something like:
+# from app.users.models import User  # Import the User model
+# If you have other models, import them below as well:
+from apps.users.models import User  # Example import for user model
+# Add more imports for any new models in the future, such as:
+# from app.orders.models import Order  # Example import for order model
+
+# ----------------------------------------------------------------
 
 from alembic import context
 

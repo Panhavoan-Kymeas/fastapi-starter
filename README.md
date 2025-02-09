@@ -1,3 +1,4 @@
+
 # FastAPI Starter Project
 
 This is a starter project for building APIs with FastAPI. It includes:
@@ -58,7 +59,16 @@ Once activated, you should see `(venv)` in your terminal prompt.
 5. **Set Up the Database**  
    The project uses SQLite by default. To initialize the database:
 
-   1. Run the following command to apply migrations:
+   1. **Import all Models into `env.py` for Alembic**  
+      For Alembic to detect your models, you must import them in `env.py`. This is crucial for migration to work.  
+      Example:
+
+      ```python
+      # In env.py, import models like this:
+      from apps.users.models import User  # Add imports for all models
+      ```
+
+   2. **Run the following command to apply migrations:**
 
       ```bash
       alembic upgrade head
@@ -131,6 +141,7 @@ alembic upgrade head
   ```
 
 - **Environment Variables**: Ensure sensitive information (like database credentials) is stored in the `.env` file, which is ignored by Git.
+- **Alembic Migrations**: Always ensure all your models are imported into `env.py` for Alembic to detect and apply the necessary migrations. Failing to do so will result in migrations not reflecting the latest changes to the models.
 
 ## Contributing
 
@@ -139,4 +150,3 @@ Feel free to contribute to this project by opening issues or submitting pull req
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-# fastapi-starter
