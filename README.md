@@ -22,7 +22,7 @@ This is a starter project for building APIs with FastAPI. It includes:
 If you haven't already cloned the repository, do so using:
 
 ```bash
-git clone https://github.com/yourusername/fastapi-starter.git
+git clone https://github.com/Panhavoan-Kymeas/fastapi-starter.git
 cd fastapi-starter
 ```
 
