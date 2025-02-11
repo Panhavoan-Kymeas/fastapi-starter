@@ -3,23 +3,26 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 import os
 import sys
+import importlib.util
 from core.config import settings
 from core.database import Base
-from core.apps_config import APPS  # Import the app list
 
-# Ensure the app folder is included in the path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "app")))
+# Ensure the root project directory is in sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# Dynamically import models from each app
-for app_name in APPS:
-    try:
-        # Import the models module for each app
-        __import__(f"apps.{app_name}.models")
-    except ImportError as e:
-        print(f"Warning: Could not import models from app '{app_name}': {e}")
+# Define the models directory
+MODELS_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# Dynamically import all models in the models directory
+for filename in os.listdir(MODELS_DIR):
+    if filename.endswith(".py") and filename != "__init__.py":
+        module_name = f"models.{filename[:-3]}"  # Remove .py extension
+        try:
+            importlib.import_module(module_name)
+        except ImportError as e:
+            print(f"Warning: Could not import module '{module_name}': {e}")
+
+# Alembic Config object, which provides access to the .ini file
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
@@ -27,8 +30,7 @@ config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
+# Add model metadata for autogenerate
 target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:

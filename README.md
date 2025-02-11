@@ -1,3 +1,4 @@
+
 # FastAPI Starter Project
 
 This is a starter project for building APIs with FastAPI. It includes:
@@ -63,16 +64,8 @@ pip install -r requirements/dev.txt
 
 The project uses SQLite by default. To initialize the database:
 
-1. **Add Apps to core/apps_config.py for Alembic**
-   - For Alembic to detect your models, add your app names to the APPS list in `core/apps_config.py`. This is crucial for migration to work.
-   - Example:
-     ```python
-     APPS = [
-         "users",  # Add your app names here
-         "orders",
-         "products",
-     ]
-     ```
+1. **Ensure Models Are in the Centralized `models` Folder**
+   - As long as your models are created in the centralized `models` folder, Alembic will automatically detect and migrate them.
 2. Run the following command to apply migrations:
    ```bash
    alembic upgrade head
@@ -125,10 +118,11 @@ alembic upgrade head
 
 ```
 .
-├── core                # Core functionality (config, database, security)
+├── core               # Core functionality (config, database, security)
 ├── apps               # Application modules (e.g., users)
-│   └── users          # User-related models, schemas, routes, and services
+│   └── users          # User-related schemas, routes, and services
 ├── tests              # Test suite
+├── models             # Centralized Models
 ├── migrations         # Alembic migration scripts
 ├── requirements       # Dependency files
 ├── .env               # Environment variables
@@ -145,7 +139,7 @@ alembic upgrade head
   pip install -r requirements/dev.txt
   ```
 - **Environment Variables**: Ensure sensitive information (like database credentials) is stored in the `.env` file, which is ignored by Git.
-- **Alembic Migrations**: Always ensure all your apps are added to the APPS list in `core/apps_config.py` for Alembic to detect and apply the necessary migrations. Failing to do so will result in migrations not reflecting the latest changes to the models.
+- **Alembic Migrations**: As long as your models are located in the `models` folder, Alembic will automatically detect and apply the necessary migrations. There's no need to manually add apps to `core/apps_config.py`.
 
 ## Contributing
 
